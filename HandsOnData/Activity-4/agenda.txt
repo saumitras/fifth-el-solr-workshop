@@ -1,0 +1,12 @@
+1. Create MySQL tables for storing stackechange data
+2. Load stackexchange dumps in MySQL 
+
+3. Define a data import handler
+4. Adding dependency and request handler in solrconfig.xml
+5. Define a data-config.xml file for solr to mysql fields mapping
+
+6. Index document in Solr using data import handler
+	6.1 Full import
+	6.2 Delta import
+
+7. Defining transformer

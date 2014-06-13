@@ -1,0 +1,44 @@
+<dataConfig>
+  <dataSource type="JdbcDataSource" 
+    driver="com.mysql.jdbc.Driver"
+    url="jdbc:mysql://127.0.0.1:3306/stacksearch" 
+    user="solruser" 
+    password="solruser"/>
+
+    <document>
+
+      <entity name="post"
+        query="select id, site, posttype, post, creationdate, score, parentid, acceptedansid, title, tags, answercount, commentcount, favoritecount from post"
+        transformer="RegexTransformer">
+
+        <field column="id" name="id" />
+        <field column="site" name="st_site" />
+        <field column="posttype" name="st_posttype" />
+        <field column="post" name="st_post" /> 
+        
+        <field column="creationdate" name="st_creationdate" />
+        <field column="score" name="st_score" />
+        <field column="parentid" name="st_parentid" />
+        <field column="acceptedansid" name="st_acceptedansid" />
+        <field column="title" name="st_title" />
+        <field column="tags" name="st_tags" sourceColName="tags" splitBy=","  />
+        <field column="answercount" name="st_answercount" />
+        <field column="commentcount" name="st_commentcount" />
+        <field column="favoritecount" name="st_favoritecount" />
+     
+        <entity name="comments"
+            query="select commenttext from comments where postid ='${post.id}'">
+            <field column="commenttext" name="st_comments" />
+        </entity>
+
+        <entity name="user"
+            query="select displayname from user where id ='${post.id}'">
+            <field column="displayname" name="st_displayname" />
+        </entity>
+
+
+       <!-- <field column="comments" sourceColName="commenttext" splitBy="," /> -->
+       
+      </entity>
+   </document>
+</dataConfig>

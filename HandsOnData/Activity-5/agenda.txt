@@ -1,0 +1,8 @@
+1. Define a search handler named stacksearch and declare 
+	1.1 defaults
+	1.2	appends
+	1.3	last-components
+
+2. Try out different queries from the queries note and understand the response format & content
+
+3. Define a suggester component for ‘autocomple’ using ‘post’ field as source

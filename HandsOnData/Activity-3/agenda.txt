@@ -1,0 +1,4 @@
+1. Creating a java project and add SolrJ dependency
+2. Indexing single doc using SolrJ
+3. Indexing in batch mode
+4. Understand commit
