@@ -1,4 +1,0 @@
-1. Solr directories walkthrough
-2. Start single node solr instance
-3. Index some sample documents
-4. Admin UI overview

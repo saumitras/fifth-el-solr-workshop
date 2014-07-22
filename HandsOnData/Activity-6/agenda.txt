@@ -1,5 +1,0 @@
-1. Setup a 2 instance zookeeper quorum
-2. Launch a 4 node Solr cluster
-3. Upload a configSet to zookeeper
-4. Create a 2 shard 2 replica collection using Collections API
-5. Index document with SolrJ using CloudSolrServer

@@ -1,0 +1,30 @@
+(1) Start Solr on default port
+	
+	java -jar start.jar
+
+
+(2) Start Solr with clustering enabled
+
+	java -Dsolr.clustering.enabled=true -jar start.jar
+
+
+(3) Start Solr on different port
+	
+	java -Djetty.port=2001 -jar start.jar
+
+
+(4) Start Apache server
+	
+	sudo /etc/init.d/httpd start
+
+
+(5) Start MySQL Server
+	
+	sudo /etc/init.d/mysqld start
+
+
+(6) Start zookeeper
+	
+	rm -rf /var/lib/zookeeper/*
+	zkServer.sh start
+

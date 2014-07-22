@@ -1,5 +1,0 @@
-1. Create a new collection
-2. Understand schema.xml contents
-3. Create a custom datatype
-4. Create schema for stackexchange data
-5. Learn how to use Admin UI to analyze and tune fieldTypes

@@ -1,0 +1,150 @@
+Activity-5: Configuring Autocomplete and SpellCheck
+===================================================
+
+(1) Add a field in schema.xml for spellcheck suggestions
+
+<field name="suggest" type="text_suggest" indexed="true" stored="false" termVectors="true" termPositions="true" termOffsets="true"  />
+<copyField source="st_post"  dest="suggest"/>
+
+----------------------------------------------------------------------------------------
+
+(2) Define a new fieldType in schema.xml (/home/solruser/work/solr-4.8.1/example-minimal/solr/collection1/conf/schema.xml)
+
+  
+  <fieldType name="text_suggest" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.UAX29URLEmailTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+      </analyzer>
+   </fieldType>
+
+
+----------------------------------------------------------------------------------------
+
+(3) Make changes in "stacksearch" requestHandler in solrconfig.xml 
+
+
+  Edit /home/solruser/work/solr-4.8.1/example-minimal/solr/collection1/conf/solrconfig.xml
+
+
+  <requestHandler name="/stacksearch" class="solr.SearchHandler">
+      <!-- default values for query parameters can be specified, these
+           will be overridden by parameters in the request
+        -->
+       <lst name="defaults">
+         <str name="echoParams">explicit</str>
+         <int name="rows">30</int>
+         <str name="df">st_post</str>
+         <str name="wt">xml</str>
+
+         <!-- Spell checking defaults -->
+         <str name="spellcheck">on</str>
+         <str name="spellcheck.extendedResults">false</str>
+         <str name="spellcheck.count">5</str>
+         <str name="spellcheck.alternativeTermCount">2</str>
+         <str name="spellcheck.maxResultsForSuggest">5</str>
+         <str name="spellcheck.collate">true</str>
+         <str name="spellcheck.collateExtendedResults">true</str>
+         <str name="spellcheck.maxCollationTries">5</str>
+         <str name="spellcheck.maxCollations">3</str>
+
+         <str name="carrot.title">st_post</str>
+         <str name="clustering">true</str>
+
+         <str name="hl.fl">st_post</str>
+         <str name="hl.fragsize">1000</str>
+         <str name="hl.snippets">1</str>
+         
+         <str name="fl">id, st_post</str>
+
+       </lst>
+
+       <lst name="appends">
+          
+          <str name="facet.mincount">1</str>
+          <str name="facet.field">st_tags</str>
+          <str name="facet.field">st_posttype</str>
+          <str name="facet.field">st_displayname</str>
+          <str name="facet.field">st_site</str>
+       </lst>
+
+       <arr name="last-components">
+         <str>clustering</str>
+         <str>spellcheck</str>
+       </arr>
+   
+   
+    </requestHandler>
+
+
+----------------------------------------------------------------------------------------
+
+
+(4) Make changes in "spellcheck" searchComponent
+
+	// Change "queryAnalyzerFieldType" to "text_en"
+	<str name="queryAnalyzerFieldType">text_en</str>
+
+	// Change the spellchecker field to "suggest"
+	<str name="field">suggest</str>
+
+
+----------------------------------------------------------------------------------------
+
+(5) Now try searching for some mis-spelled word
+
+http://localhost:8983/solr/collection1/stacksearch?q=st_post:deta
+
+It will show some suggestions.
+
+
+
+
+----------------------------------------------------------------------------------------
+
+
+
+(6) Add an "suggest" component based on spell-check for autocomplete
+
+    //Change "suggest" searchComponent and requestHandler as below in solrconfig.xml
+
+
+    <searchComponent class="solr.SpellCheckComponent" name="suggest"> 
+      <lst name="spellchecker">
+        <str name="name">suggestDictionary</str>  
+        <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+        <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookupFactory</str> 
+        <str name="field">suggest</str> 
+        <float name="threshold">0.</float>
+        <str name="buildOnCommit">true</str> 
+      </lst>
+    </searchComponent>
+
+
+    <requestHandler name="/suggest" class="org.apache.solr.handler.component.SearchHandler">
+  	  <lst name="defaults">
+  	    <str name="echoParams">none</str>
+  	    <str name="wt">json</str>
+  	    <str name="indent">false</str>
+  	    <str name="spellcheck">true</str>                          
+  	    <str name="spellcheck.dictionary">suggestDictionary</str>  
+  	    <str name="spellcheck.onlyMorePopular">true</str>  
+  	    <str name="spellcheck.count">5</str>               
+  	    <str name="spellcheck.collate">false</str>         
+  	  </lst>
+  	  <arr name="components">                    
+  	   	<str>suggest</str>              
+  	  </arr>
+     </requestHandler>
+
+
+
+----------------------------------------------------------------------------------------
+
+(7) Now you can use this component for autocomplete
+
+    http://localhost:8983/solr/collection1/suggest?q=some
+

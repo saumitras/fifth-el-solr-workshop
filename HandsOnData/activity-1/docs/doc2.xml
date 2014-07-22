@@ -1,0 +1,10 @@
+<add>
+
+<doc>
+  <field name="id">doc-2</field>
+  <field name="title">Apache Hadoop</field>
+  <field name="text">Apache Hadoop is an open-source software framework for storage and large-scale processing of data-sets on clusters of commodity hardware. Hadoop is an Apache top-level project being built and used by a global community of contributors and users. It is licensed under the Apache License 2.0.</field>
+
+</doc>
+
+</add>

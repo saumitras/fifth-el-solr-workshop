@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<schema name="example" version="1.5">
+   
+   <!-- Define Unique Key field-->  
+   <uniqueKey>id</uniqueKey>
+
+   
+   <!-- Fields Definition -->
+   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
+
+   <field name="st_creationdate" type="tdate" indexed="true" stored="true" />
+   
+   <field name="st_site"     type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="st_posttype" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="st_parentid" type="string" indexed="true" stored="true" />
+   <field name="st_acceptedansid" type="string" indexed="true" stored="true" />
+   <field name="st_displayname" type="string" indexed="true" stored="true" multiValued="false" />
+   <field name="st_tags" type="string" indexed="true" stored="true" multiValued="true" />
+   
+   <field name="st_comments" type="text_general" indexed="true" stored="true" multiValued="true" />
+
+   <field name="st_post" type="text_en" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true" />
+   <field name="st_title" type="text_en" indexed="true" stored="true" />
+   
+   <field name="st_score" type="tlong" indexed="true" stored="true" />
+   <field name="st_answercount" type="tlong" indexed="true" stored="true" />
+   <field name="st_commentcount" type="tlong" indexed="true" stored="true" />
+   <field name="st_favoritecount" type="tlong" indexed="true" stored="true" />
+
+
+   <field name="_version_" type="long" indexed="true" stored="true"/>
+   <field name="_root_" type="string" indexed="true" stored="false"/>
+
+
+
+   <!-- FieldTypes(Datatypes) Definition -->
+
+   <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+
+   <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
+   <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
+   <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+   <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
+
+   <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0"/>
+   <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0"/>
+   <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
+   <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
+
+   <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+   <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+
+
+  
+  
+
+   <!-- A general text field that has reasonable, generic
+         cross-language defaults: it tokenizes with StandardTokenizer,
+    removes stop words from case-insensitive "stopwords.txt"
+    (empty by default), and down cases.  At query time only, it
+    also applies synonyms. -->
+   <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+   </fieldType>
+
+    
+
+
+
+    <!-- A text field with defaults appropriate for English: it
+         tokenizes with StandardTokenizer, removes English stop words
+         (lang/stopwords_en.txt), down cases, protects words from protwords.txt, and
+         finally applies Porter's stemming.  The query time analyzer
+         also applies synonyms from synonyms.txt. -->
+   <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        -->
+        <!-- Case insensitive stop word removal.
+        -->
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+   <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+   <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+   -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+   <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+   <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+        <filter class="solr.EnglishMinimalStemFilterFactory"/>
+   -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+   </fieldType>
+
+
+
+
+   <!-- lowercases the entire field value, keeping it as a single token.  -->
+   <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory" />
+      </analyzer>
+   </fieldType>
+
+
+</schema>

@@ -1,0 +1,52 @@
+
+  <requestHandler name="/stacksearch" class="solr.SearchHandler">
+    <!-- default values for query parameters can be specified, these
+         will be overridden by parameters in the request
+      -->
+     <lst name="defaults">
+       <str name="echoParams">explicit</str>
+       <int name="rows">30</int>
+       <str name="df">st_post</str>
+       <str name="wt">xml</str>
+
+       <!-- Spell checking defaults -->
+        <str name="spellcheck">on</str>                          
+        <str name="spellcheck.extendedResults">false</str>        
+        <str name="spellcheck.count">5</str>                      
+        <str name="spellcheck.alternativeTermCount">2</str>       
+        <str name="spellcheck.maxResultsForSuggest">5</str>       
+        <str name="spellcheck.collate">true</str>                 
+        <str name="spellcheck.collateExtendedResults">true</str>  
+        <str name="spellcheck.maxCollationTries">5</str>          
+        <str name="spellcheck.maxCollations">3</str> 
+
+
+
+
+       <str name="carrot.title">st_post</str>
+       <str name="clustering">true</str>
+
+       <str name="hl.fl">st_post</str>
+       <str name="hl.fragsize">1000</str>
+       <str name="hl.snippets">1</str>
+       
+       <str name="fl">id, st_post</str>
+
+     </lst>
+
+     <lst name="appends">
+        
+        <str name="facet.mincount">1</str>
+        <str name="facet.field">st_tags</str>
+        <str name="facet.field">st_posttype</str>
+        <str name="facet.field">st_displayname</str>
+        <str name="facet.field">st_site</str>
+     </lst>
+
+     <arr name="last-components">
+       <str>clustering</str>
+     </arr>
+ 
+ 
+    </requestHandler>
+

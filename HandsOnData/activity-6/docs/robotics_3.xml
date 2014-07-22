@@ -1,0 +1,23 @@
+<add>
+
+<doc>
+  <field name="id">robotics_3</field>
+  <field name="st_tags">sensor</field>
+  <field name="st_favoritecount">0</field>
+  
+  <field name="st_post">
+  	<![CDATA[
+  	<p>Imagine programming a 3 wheel soccer robot. What type of controller would you use for spinning it? P? PID?</p>\n\n<p>The goal for this controller is that it should make the robot stand in a defined angle ( 0 degree ) and turn back if rotated by hand or other robot. </p>\n\n<p>
+  	]]>
+  </field>
+  <field name="st_posttype">QUESTION</field>
+  <field name="st_answercount">2</field>
+  <field name="st_score">11</field>
+  <field name="st_creationdate">2012-10-23T19:38:18Z</field>
+  <field name="st_parentid">NA</field>
+  <field name="st_comments">Presumably this routine is run every time the compas generates a new value for degree?</field>
+  <field name="st_displayname">Geoff Dalgas</field>
+  
+</doc>
+
+</add>
